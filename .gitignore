@@ -1,0 +1,7 @@
+.env
+users.json
+data/
+*.db
+gooseUp.sh
+gooseDown.sh
+internal/database

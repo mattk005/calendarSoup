@@ -60,16 +60,13 @@ func (cfg *config) getUserData(path string) error {
 		return err
 	}
 	for _, u := range users {
-		_, err = cfg.db.CreateUser(context.Background(), database.CreateUserParams{
+		_, err = cfg.queries.CreateUser(context.Background(), database.CreateUserParams{
 			Name: u.User,
 			WfmID: sql.NullString{
 				String: u.Num,
 				Valid:  len(u.Num) > 0,
 			},
-			WfmExternalCalendar: sql.NullString{
-				String: u.ID,
-				Valid:  len(u.ID) > 0,
-			},
+			WfmExternalCalendar: u.ID,
 		})
 		if err != nil && !strings.Contains(err.Error(), "UNIQUE constraint failed: users.wfm_external_calendar") {
 			return err

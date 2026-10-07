@@ -1,15 +1,15 @@
-package main
+package config
 
 import (
 	"time"
 )
 
-type dateRange struct {
-	startDate string
-	endDate   string
+type DateRange struct {
+	StartDate string
+	EndDate   string
 }
 
-func getDateRange() dateRange {
+func getDateRange() DateRange {
 	// Set today's date
 	now := time.Now()
 
@@ -36,5 +36,5 @@ func getDateRange() dateRange {
 	// if now.AddDate(0, 6, 0).After(decThirtyFirst) {
 	// 	return janFirstString, sixMonths.Format("20060102 150405")
 	// }
-	return dateRange{startDate: janFirstString, endDate: decThirtyFirstString}
+	return DateRange{StartDate: janFirstString, EndDate: decThirtyFirstString}
 }

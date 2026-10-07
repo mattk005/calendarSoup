@@ -1,28 +1,38 @@
-package main
+package getEventsJson
 
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
+	"wfm-json-to-ics/internal/config"
 	"wfm-json-to-ics/internal/database"
 
 	"github.com/google/uuid"
 )
 
-func (cfg *config) shiftsJSONtoDB(s *shifts, u *database.User) error {
+func shiftsJSONtoDB(s *shifts, u *database.User, cfg *config.Config) error {
 	dateInFormat := "20060102 150405"
 	dateOutFormat := "02 Jan 2006"
 	// dateStampFormat := "20060102T150405"
-	loc := time.Local // this will probably blow up (change in daylight savings here)
-	// time off
-	tx, err := cfg.db.Begin()
+	loc := time.Local       // this will probably blow up (daylight savings in 2026 has changed in this area)
+	if len(s.Shifts) < 50 { // arbitrary number, shifts is typically 200+ shifts for a full time employee
+		return errors.New("shifts length is short aborted refresh")
+	}
+	tx, err := cfg.DB.Begin()
 	if err != nil {
 		return err
 	}
 	defer tx.Rollback()
-	qtx := cfg.queries.WithTx(tx)
+	qtx := cfg.Queries.WithTx(tx)
+
+	if err := qtx.DeleteEventsByUser(context.Background(), u.ID); err != nil {
+		return nil
+	}
+
+	// time off
 	for _, e := range s.Ltas {
 		startTime, err := time.ParseInLocation(dateInFormat, e.StartTime, loc)
 		if err != nil {

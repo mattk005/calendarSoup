@@ -23,11 +23,11 @@ SELECT *
   FROM events
   WHERE user_id = ?;
 
--- name: GetEventsByWFMUUID :many
-SELECT *
-  FROM events
-  JOIN users
-  ON user_id = users.id
-  WHERE users.wfm_external_calendar = ?
-;
+-- name: DeleteEventsByUser :exec
+DELETE FROM events
+  WHERE user_id = ?;
 
+
+-- name: DeleteEventsByDateRange :exec
+DELETE FROM events
+WHERE event_start BETWEEN :min_date AND :max_date ;

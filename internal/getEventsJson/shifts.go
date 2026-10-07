@@ -1,4 +1,4 @@
-package main
+package getEventsJson
 
 // type shifts struct {
 // 	Ltas []struct {

@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"context"
@@ -12,9 +12,9 @@ import (
 	"wfm-json-to-ics/internal/database"
 )
 
-type tokens struct {
-	jSessionID string
-	routeID    string
+type Tokens struct {
+	JSessionID string
+	RouteID    string
 }
 
 type userData struct {
@@ -35,16 +35,16 @@ func tokenHelper(s, sep string) string {
 	return result
 }
 
-func getTokens(args []string) (tokens, error) {
+func GetTokens(args []string) (Tokens, error) {
 	argsString := strings.Join(args, "") + ";"
-	t := tokens{
-		jSessionID: tokenHelper(argsString, "JSESSIONID="),
-		routeID:    tokenHelper(argsString, "ROUTEID="),
+	t := Tokens{
+		JSessionID: tokenHelper(argsString, "JSESSIONID="),
+		RouteID:    tokenHelper(argsString, "ROUTEID="),
 	}
 	return t, nil
 }
 
-func (cfg *config) getUserData(path string) error {
+func (cfg *Config) GetUserData(path string) error {
 	fp, err := filepath.Abs(path)
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func (cfg *config) getUserData(path string) error {
 		return err
 	}
 	for _, u := range users {
-		_, err = cfg.queries.CreateUser(context.Background(), database.CreateUserParams{
+		_, err = cfg.Queries.CreateUser(context.Background(), database.CreateUserParams{
 			Name: u.User,
 			WfmID: sql.NullString{
 				String: u.Num,

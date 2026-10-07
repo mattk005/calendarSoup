@@ -2,8 +2,11 @@
 users.json
 data/
 *.db
+*.db-wal
+*.db-shm
 gooseUp.sh
 gooseDown.sh
 internal/database
 profiles/
 wfm-json-to-ics
+

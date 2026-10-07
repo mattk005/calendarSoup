@@ -1,4 +1,4 @@
-package main
+package localics
 
 import (
 	"bufio"
@@ -6,13 +6,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	"wfm-json-to-ics/internal/config"
 	"wfm-json-to-ics/internal/database"
 
 	ics "github.com/arran4/golang-ical"
 )
 
 // actually I problably wont need this
-func (cfg *config) writeICSOut(c *ics.Calendar, u *database.User) error {
+func WriteICSOut(c *ics.Calendar, u *database.User, cfg *config.Config) error {
 	fields := strings.Fields(u.Name)
 	dir := strings.ToUpper(string(fields[1][0])) + strings.ToUpper(string(fields[0][0]))
 	dirPath := filepath.Join("data", dir)
